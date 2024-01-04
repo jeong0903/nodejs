@@ -79,7 +79,7 @@ var app = http.createServer(function (request, response) {
         `
       <form action="http://localhost:3000/create_process" method="post">
         <p><input type="text" name="title" placeholder="title"></p>
-        <p><textarea placeholder="description"></textarea></p>
+        <p><textarea placeholder="description" name="description"></textarea></p>
         <p><input type="submit"></p>
       </form>
       `
@@ -97,12 +97,10 @@ var app = http.createServer(function (request, response) {
       var title = post.title;
       var description = post.description;
       fs.writeFile(`data/${title}`, description, 'utf8', function (err) {
-        response.writeHead(200);
-        response.end('success');
+        response.writeHead(302, {Location: `/?id=${title}`});
+        response.end();
       })
     });
-    response.writeHead(200);
-    response.end('success');
   } else {
     response.writeHead(404);
     response.end("Not Found");
