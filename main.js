@@ -79,7 +79,7 @@ var app = http.createServer(function (request, response) {
         title,
         list,
         `
-      <form action="http://localhost:3000/create_process" method="post">
+      <form action="/create_process" method="post">
         <p><input type="text" name="title" placeholder="title"></p>
         <p><textarea placeholder="description" name="description"></textarea></p>
         <p><input type="submit"></p>
@@ -101,6 +101,32 @@ var app = http.createServer(function (request, response) {
         response.writeHead(302, {Location: `/?id=${title}`});
         response.end();
       })
+    });
+  } else if(pathname === "/update"){
+    fs.readdir("./data", function (error, filelist) {
+      fs.readFile(
+        `data/${queryData.id}`,
+        "utf8",
+        function (err, description) {
+          var title = queryData.id;
+          var list = templateList(filelist);
+          var template = templateHTML(
+            title,
+            list,
+            `
+            <form action="/update_process" method="post">
+              <p><input type="hidden" name="id" value="${title}" ></p>
+              <p><input type="text" name="title" value="${title}"></p>
+              <p><textarea name="description">${description}</textarea></p>
+              <p><input type="submit"></p>
+            </form>
+            `, 
+            `<a href="/create">create</a> <a href="/update?id=${title}">update</a>`
+          );
+          response.writeHead(200);
+          response.end(template);
+        }
+      );
     });
   } else {
     response.writeHead(404);
