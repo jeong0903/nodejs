@@ -1,0 +1,4 @@
+<script>
+alert('hi');
+location.href="http://google.com";
+</script>
